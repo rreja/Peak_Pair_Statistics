@@ -1,0 +1,3 @@
+fname	final_mode	preview_mode	perc95	paired	orphans
+Reb1-rep2_s5e10F1.gff	25.5	25.5	58.0	9518	22864
+Reb1-rep3_s5e10F1.gff	28.5	28.5	18.0	30484	46184
