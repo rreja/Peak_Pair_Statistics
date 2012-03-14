@@ -8,8 +8,23 @@ opendir my($dh), $dir || die "Cannot open the directory";
 my @files = readdir $dh;
 closedir $dh;
 
-my @test = (2,3,2,2,2,2,4,5,5,5,5);
-my %file;
+# opening the directory where all the index files are present.
+my $idxdir = $ARGV[1]; #remember to put a "/" at the end of the directory.
+opendir my($idh), $idxdir || die "Cannot open the directory";
+my @indexes = readdir $idh;
+closedir $idh;
+
+my %file; #hash to store the information as replicates.
+
+foreach my $idx (@indexes){
+    next if($idx =~ /^\./);
+    #my @name = split(/\./,$idx);
+    #next if(($name[1] ne "idx") || ($name[1] ne "tab"));
+    print $idx."\n";
+    
+}
+
+exit;
 
 foreach my $name (@files)
 {
