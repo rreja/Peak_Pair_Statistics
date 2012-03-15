@@ -14,7 +14,9 @@ opendir my($idh), $idxdir || die "Cannot open the directory";
 my @indexes = readdir $idh;
 closedir $idh;
 
-my %file; #hash to store the information as replicates.
+my (%hash_idx, %hash_O,%hash_S);
+my $D = 20;      # Needs input from user.
+
 
 foreach my $idx (@indexes){
     next if($idx =~ /^\./);
@@ -22,18 +24,21 @@ foreach my $idx (@indexes){
     my @name = split(/\./,$idx);
     if(($name[1] eq "idx") || ($name[1] eq "tab")){
         open IN,$idxdir.$idx || die "File not found";
+        my $sum = 0;
         while(<IN>){
             chomp($_);
             next if($_ =~ /^chrom/);
-            
+            my @cols = split(/\t/,$_);
+            $sum = $sum + $cols[2] + $cols[3];
         }
+        $hash_idx{$name[0]} = $sum;
+        close(IN);
         
     }
     
     
 }
 
-exit;
 
 foreach my $name (@files)
 {
@@ -47,7 +52,7 @@ foreach my $name (@files)
             next if(($_ =~ /^chrom/) || ($_ =~ /^#/));
             $count_O++;
         }
-        $file{$fname_parts[1]} = $count_O;
+        $hash_O{$fname_parts[1]} = $count_O;
         #print $count_O."\n";
         close(IN);
         
@@ -68,13 +73,34 @@ foreach my $name (@files)
                        
         }
         my $no_of_peaks = 2*$count_S;
+        my @sorted_tags = sort { $b <=> $a } @tags;
+        my $quant_1 = sum_quantile(\@sorted_tags,1);
+        my $quant_5 = sum_quantile(\@sorted_tags,5);
+        my $quant_10 = sum_quantile(\@sorted_tags,10);
+        my $quant_25 = sum_quantile(\@sorted_tags,25);
+        my $quant_50 = sum_quantile(\@sorted_tags,50);
+        my $quant_75 = sum_quantile(\@sorted_tags,75);
+        my $quant_100 = sum_quantile(\@sorted_tags,100);
+        
+        print $quant_1."\t".$quant_5."\t".$quant_10."\t".$quant_25."\t".$quant_50."\t".$quant_75."\t".$quant_100."\n";
         my $vec = mode(@cwdist)."\t".$no_of_peaks."\t".median(@tags)."\t".mean(@tags)."\t".$sum_of_col6;
-        print $vec."\n";
+        #print $vec."\n";
         close(IN);
     }
     
 }
 
+sub sum_quantile{
+    my ($array,$cutoff) = @_;
+    my $sum = 0;
+    my $length = scalar(@$array);
+    my $quant = int($length*($cutoff/100));
+    for(my $i=0;$i<$quant;$i++){
+        $sum += $$array[$i];
+    }
+    my $sum_per_bp = $sum/($D*$quant);
+    return($sum_per_bp);
+}
 
 sub median{
     my @a = sort {$a <=> $b} @_;
