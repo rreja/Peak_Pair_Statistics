@@ -18,9 +18,18 @@ my %file; #hash to store the information as replicates.
 
 foreach my $idx (@indexes){
     next if($idx =~ /^\./);
-    #my @name = split(/\./,$idx);
-    #next if(($name[1] ne "idx") || ($name[1] ne "tab"));
-    print $idx."\n";
+    next if($idx !~ /.*\..*/);
+    my @name = split(/\./,$idx);
+    if(($name[1] eq "idx") || ($name[1] eq "tab")){
+        open IN,$idxdir.$idx || die "File not found";
+        while(<IN>){
+            chomp($_);
+            next if($_ =~ /^chrom/);
+            
+        }
+        
+    }
+    
     
 }
 
