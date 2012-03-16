@@ -4,7 +4,7 @@ use List::Util qw(max);
 use Getopt::Std;
 
 my %opt;
-getopt('diges',\%opt);
+getopt('disgeu',\%opt);
 
 # opening the directory where all the S_ and D_ files exists
 my $dir = $opt{'d'};  # remember to put a "/" at the end of the directory.
@@ -30,7 +30,7 @@ else
     $gsize = find_gsize($genome);   
 }
 
-
+my $uniquely_mapped_reads = $opt{'u'};
 
 
 foreach my $idx (@indexes){
@@ -91,13 +91,13 @@ foreach my $name (@files)
         }
         my $no_of_peaks = 2*$count_S;
         my @sorted_tags = sort { $b <=> $a } @tags;
-        my $quant_1 = sum_quantile(\@sorted_tags,1);
-        my $quant_5 = sum_quantile(\@sorted_tags,5);
-        my $quant_10 = sum_quantile(\@sorted_tags,10);
-        my $quant_25 = sum_quantile(\@sorted_tags,25);
-        my $quant_50 = sum_quantile(\@sorted_tags,50);
-        my $quant_75 = sum_quantile(\@sorted_tags,75);
-        my $quant_100 = sum_quantile(\@sorted_tags,100);
+        my $quant_1 = sum_quantile(\@sorted_tags,1,$fname_parts[1]);
+        my $quant_5 = sum_quantile(\@sorted_tags,5,$fname_parts[1]);
+        my $quant_10 = sum_quantile(\@sorted_tags,10,$fname_parts[1]);
+        my $quant_25 = sum_quantile(\@sorted_tags,25,$fname_parts[1]);
+        my $quant_50 = sum_quantile(\@sorted_tags,50,$fname_parts[1]);
+        my $quant_75 = sum_quantile(\@sorted_tags,75,$fname_parts[1]);
+        my $quant_100 = sum_quantile(\@sorted_tags,100,$fname_parts[1]);
         
         my $vec = $fname_parts[1]."\t".mode(@cwdist)."\t".$no_of_peaks."\t".$hash_O{$fname_parts[1]}."\t".median(@tags)."\t".mean(@tags);
         my $quants = $quant_1."\t".$quant_5."\t".$quant_10."\t".$quant_25."\t".$quant_50."\t".$quant_75."\t".$quant_100;
@@ -108,7 +108,7 @@ foreach my $name (@files)
 }
 
 sub sum_quantile{
-    my ($array,$cutoff) = @_;
+    my ($array,$cutoff,$rep) = @_;
     my $sum = 0;
     my $length = scalar(@$array);
     my $quant = int($length*($cutoff/100));
@@ -116,7 +116,8 @@ sub sum_quantile{
         $sum += $$array[$i];
     }
     my $sum_per_bp = $sum/($D*$quant);
-    return($sum_per_bp);
+    my $noise_per_bp = ($uniquely_mapped_reads-$hash_idx{$rep})/($gsize-($D*$quant));
+    return($sum_per_bp/$noise_per_bp);
 }
 
 sub median{
