@@ -1,21 +1,36 @@
 use strict;
 use warnings;
 use List::Util qw(max);
+use Getopt::Std;
+
+my %opt;
+getopt('diges',\%opt);
 
 # opening the directory where all the S_ and D_ files exists
-my $dir = $ARGV[0];  # remember to put a "/" at the end of the directory.
+my $dir = $opt{'d'};  # remember to put a "/" at the end of the directory.
 opendir my($dh), $dir || die "Cannot open the directory";
 my @files = readdir $dh;
 closedir $dh;
 
 # opening the directory where all the index files are present.
-my $idxdir = $ARGV[1]; #remember to put a "/" at the end of the directory.
+my $idxdir = $opt{'i'}; #remember to put a "/" at the end of the directory.
 opendir my($idh), $idxdir || die "Cannot open the directory";
 my @indexes = readdir $idh;
 closedir $idh;
 
+my $gsize;
 my (%hash_idx, %hash_O,%hash_S);
-my $D = 20;      # Needs input from user.
+my $D = $opt{'e'};      # Needs input from user.
+my $genome = $opt{'g'};
+if($genome eq "NA"){
+    $gsize = $opt{'s'};
+}
+else
+{
+    $gsize = find_gsize($genome);   
+}
+
+
 
 
 foreach my $idx (@indexes){
@@ -39,6 +54,8 @@ foreach my $idx (@indexes){
     
 }
 
+print "Filename\tPeak-pair-mode\tPeaks-in-peak-pairs\tOrphan-peaks\tMedian-peak-pair-occupancy\tAverage-peak-pair-occupancy\tFraction-of-all-mapped-reads-in-peak-pairs\ttop-1pt-signal:noise\t";
+print "top-5pt-signal:noise\ttop-10pt-signal:noise\ttop-25pt-signal:noise\ttop-50pt-signal:noise\ttop-75pt-signal:noise\ttop-100pt-signal:noise\n";
 
 foreach my $name (@files)
 {
@@ -82,9 +99,9 @@ foreach my $name (@files)
         my $quant_75 = sum_quantile(\@sorted_tags,75);
         my $quant_100 = sum_quantile(\@sorted_tags,100);
         
-        print $quant_1."\t".$quant_5."\t".$quant_10."\t".$quant_25."\t".$quant_50."\t".$quant_75."\t".$quant_100."\n";
-        my $vec = mode(@cwdist)."\t".$no_of_peaks."\t".median(@tags)."\t".mean(@tags)."\t".$sum_of_col6;
-        #print $vec."\n";
+        my $vec = $fname_parts[1]."\t".mode(@cwdist)."\t".$no_of_peaks."\t".$hash_O{$fname_parts[1]}."\t".median(@tags)."\t".mean(@tags);
+        my $quants = $quant_1."\t".$quant_5."\t".$quant_10."\t".$quant_25."\t".$quant_50."\t".$quant_75."\t".$quant_100;
+        print $vec."\t".$sum_of_col6/$hash_idx{$fname_parts[1]}."\t".$quants."\n";
         close(IN);
     }
     
@@ -128,4 +145,32 @@ sub mode
     }
     
 }
+
+sub find_gsize
+{
+    my $genome = @_;
+    if($genome eq "sg7"){
+        return(15000000);
+    }
+    elsif($genome eq "mm9"){
+        return(3000000000);
+    }
+    elsif($genome eq "mm8"){
+        return(3000000000);
+    }
+    elsif($genome eq "hg18"){
+        return(3000000000);
+    }
+    elsif($genome eq "hg19"){
+        return(3000000000);
+    }
+    elsif($genome eq "dm3"){
+        return(120000000);
+    }
+    
+    
+}
+
+
+
 
