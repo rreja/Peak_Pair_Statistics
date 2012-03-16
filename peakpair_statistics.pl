@@ -4,7 +4,7 @@ use List::Util qw(max);
 use Getopt::Std;
 
 my %opt;
-getopt('disgeu',\%opt);
+getopt('disg',\%opt);
 
 # opening the directory where all the S_ and D_ files exists
 my $dir = $opt{'d'};  # remember to put a "/" at the end of the directory.
@@ -20,17 +20,16 @@ closedir $idh;
 
 my $gsize;
 my (%hash_idx, %hash_O,%hash_S);
-my $D = $opt{'e'};      # Needs input from user.
 my $genome = $opt{'g'};
 if($genome eq "NA"){
     $gsize = $opt{'s'};
 }
 else
 {
+   
     $gsize = find_gsize($genome);   
 }
 
-my $uniquely_mapped_reads = $opt{'u'};
 
 
 foreach my $idx (@indexes){
@@ -78,7 +77,9 @@ foreach my $name (@files)
         open IN, $dir.$name || die "File not found";
         my $count_S = 0;
         my $sum_of_col6 = 0;
-        my (@cwdist,@tags);
+        my (@cwdist,@tags,$D);
+        if($fname_parts[2] =~ /^\D\d+\D(\d+).*/)
+        {$D = $1;}
         while(<IN>){
             chomp($_);
             next if($_ =~ /^#/);
@@ -90,14 +91,15 @@ foreach my $name (@files)
                        
         }
         my $no_of_peaks = 2*$count_S;
+        my $noise_per_bp = ($hash_idx{$fname_parts[1]} - $sum_of_col6)/($gsize - ($D*$count_S));
         my @sorted_tags = sort { $b <=> $a } @tags;
-        my $quant_1 = sum_quantile(\@sorted_tags,1,$fname_parts[1]);
-        my $quant_5 = sum_quantile(\@sorted_tags,5,$fname_parts[1]);
-        my $quant_10 = sum_quantile(\@sorted_tags,10,$fname_parts[1]);
-        my $quant_25 = sum_quantile(\@sorted_tags,25,$fname_parts[1]);
-        my $quant_50 = sum_quantile(\@sorted_tags,50,$fname_parts[1]);
-        my $quant_75 = sum_quantile(\@sorted_tags,75,$fname_parts[1]);
-        my $quant_100 = sum_quantile(\@sorted_tags,100,$fname_parts[1]);
+        my $quant_1 = sum_quantile(\@sorted_tags,1,$D,$noise_per_bp);
+        my $quant_5 = sum_quantile(\@sorted_tags,5,$D,$noise_per_bp);
+        my $quant_10 = sum_quantile(\@sorted_tags,10,$D,$noise_per_bp);
+        my $quant_25 = sum_quantile(\@sorted_tags,25,$D,$noise_per_bp);
+        my $quant_50 = sum_quantile(\@sorted_tags,50,$D,$noise_per_bp);
+        my $quant_75 = sum_quantile(\@sorted_tags,75,$D,$noise_per_bp);
+        my $quant_100 = sum_quantile(\@sorted_tags,100,$D,$noise_per_bp);
         
         my $vec = $fname_parts[1]."\t".mode(@cwdist)."\t".$no_of_peaks."\t".$hash_O{$fname_parts[1]}."\t".median(@tags)."\t".mean(@tags);
         my $quants = $quant_1."\t".$quant_5."\t".$quant_10."\t".$quant_25."\t".$quant_50."\t".$quant_75."\t".$quant_100;
@@ -108,16 +110,15 @@ foreach my $name (@files)
 }
 
 sub sum_quantile{
-    my ($array,$cutoff,$rep) = @_;
+    my ($array,$cutoff,$ex,$noise) = @_;
     my $sum = 0;
     my $length = scalar(@$array);
     my $quant = int($length*($cutoff/100));
     for(my $i=0;$i<$quant;$i++){
         $sum += $$array[$i];
     }
-    my $sum_per_bp = $sum/($D*$quant);
-    my $noise_per_bp = ($uniquely_mapped_reads-$hash_idx{$rep})/($gsize-($D*$quant));
-    return($sum_per_bp/$noise_per_bp);
+    my $sum_per_bp = $sum/($ex*$quant);
+    return($sum_per_bp/$noise);
 }
 
 sub median{
@@ -149,9 +150,10 @@ sub mode
 
 sub find_gsize
 {
-    my $genome = @_;
+    my $genome = shift;
     if($genome eq "sg7"){
-        return(15000000);
+        
+        return 15000000;
     }
     elsif($genome eq "mm9"){
         return(3000000000);
