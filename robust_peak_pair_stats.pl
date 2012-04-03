@@ -1,4 +1,4 @@
-##  Notes: This script will fine if the peak-pair files start with S_ and D_ and end with _s5e20F1. Also,
+##  Notes: This script will work fine if the peak-pair files start with S_ and D_ and end with _s5e20F1. Also,
 ## the index file name (root name) to which these things get appneded should not change. For ex., if the
 ## the name of index file is Reb1-rep2.idx, then the peak-pair files should be S_Reb1-rep2_s5e20F1.gff
 
