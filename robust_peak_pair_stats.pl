@@ -93,7 +93,7 @@ while(my($name,$idx) = each %pp_files){
         my $count_S = 0;
         my $sum_of_col6 = 0;
         my (@cwdist,@tags,$D);
-        if(pop(@tmp) =~ /^\D\d+\D(\d+).*/)
+        if(pop(@tmp) =~ /^\D\d+\D(\d+).*/) # S_* files should have the same format sigma-exclusion-filter==> s5e20F1
         {$D = $1;}
         while(<IN>){
             chomp($_);
