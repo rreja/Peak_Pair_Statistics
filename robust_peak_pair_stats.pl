@@ -27,7 +27,8 @@ else
 
 
 # opening the directory where all the index files are present.
-my $idxdir = $opt{'i'}; #remember to put a "/" at the end of the directory.
+my $idxdir = $opt{'i'};
+$idxdir = check_dir($idxdir);
 opendir IDX, $idxdir || die "Cannot open the directory";
 while( (my $filename = readdir(IDX))){
     if(($filename =~ /.*idx.*/) || ($filename =~ /.*tab.*/)){
@@ -50,7 +51,8 @@ while( (my $filename = readdir(IDX))){
 closedir(IDX);
 
 # opening the directory where all the S_ and D_ files exist
-my $dir = $opt{'d'};  # remember to put a "/" at the end of the directory.
+my $dir = $opt{'d'};
+$dir = check_dir($dir);
 opendir DIR, $dir || die "Cannot open the directory";
 while(my $filename = readdir(DIR)){
     if(($filename =~ /^S_/) || ($filename =~ /^O_/)){
@@ -189,6 +191,17 @@ sub find_gsize
     
 }
 
+sub check_dir{
+    my $dir = shift;
+    my $tmp = substr($dir,-1,1);
+    if($tmp eq "/"){
+        return($dir);
+    }
+    else{
+        return($dir."/");
+    }
+}
+
 sub help_message {
   print qq{
 Program: robust_peak_pair_stats.pl (Calculate stats on peak pairs)
@@ -198,8 +211,8 @@ Usage:   robust_peak_pair_stats.pl -i <index_file_directory> -d <path_to_directo
     NOTE:    If you input files were saved using MS excel, then use:  perl -p -e 's/^M//g;' <input_file> > <input_file_no_excel_characters>
              to remove the excel characters in your file. ^M sould be typed as "ctrl-v-m". Or else the script will not work properly.
              
-    Options: -i <path1>     path to the folder with index files[accepted index file extensions, idx, tab]. Path should end with a '/'.
-             -d <path2>     path to the folder with S_*.gff and O_* files. Path should end with a '/'.
+    Options: -i <path1>     path to the folder with index files[accepted index file extensions, idx, tab]. 
+             -d <path2>     path to the folder with S_*.gff and O_* files. 
              -g             organism, sg07=>yeast, mm09=>MouseV9, mm08=>MouseV8, hg18=>human18, hg19=>human19, dm03=>Drosophila
              -s             size of genome[optional] In case of other genomes, set -g as NA and -s as the size of genome (see ex. below)
 
