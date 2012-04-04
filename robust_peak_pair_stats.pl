@@ -183,7 +183,7 @@ sub find_gsize
         return(3000000000);
     }
     elsif($genome eq "dm03"){
-        return(120000000);
+        return(139500000);
     }
     
     
