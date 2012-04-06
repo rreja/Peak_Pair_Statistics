@@ -230,13 +230,17 @@ Usage:   robust_peak_pair_stats.pl -i <index_file_directory> -d <path_to_directo
              -d <path2>     path to the folder with S_*.gff and O_* files. 
              -g             organism, sg07=>yeast, mm09=>MouseV9, mm08=>MouseV8, hg18=>human18, hg19=>human19, dm03=>Drosophila
              -s             size of genome[optional] In case of other genomes, set -g as NA and -s as the size of genome (see ex. below)
+	     -p <number>    the percent quantile you need to use to scan. For ex. scan window of 5 is default.
 
     Example:
       perl robust_peak_pair_stats.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g sg07
       perl robust_peak_pair_stats.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g NA -s 160000000
+      perl robust_peak_pair_stats.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g NA -s 160000000 -p 10
       
     Output:
-    Produces a "peak_pair_stats.txt" file in the folder that contains the S_*and D_* files.
+    Produces a "peak_pair_stats.txt" file in the folder that contains the S_*and D_* files. It also produces a
+    "signal2noise_qt_scan.txt" file in the folder that contains the S_* files.
+    
   
   };
   exit;
