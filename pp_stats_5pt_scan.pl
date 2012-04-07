@@ -3,6 +3,7 @@ use warnings;
 use List::Util qw(max);
 use Getopt::Std;
 
+
 my %opt;
 getopt('disgp',\%opt);
 &help_message if (defined $opt{h});
@@ -76,6 +77,7 @@ print OUT "Filename\tPeak-pair_mode\tPeaks_in_peak-pairs\tOrphan_peaks\tMedian_p
 open OUT1, ">".$dir."signal2noise_qt_scan.txt" || die "File not found";
 #print OUT "top_5pt_signal:noise\ttop_10pt_signal:noise\ttop_25pt_signal:noise\ttop_50pt_signal:noise\ttop_75pt_signal:noise\ttop_100pt_signal:noise\n";
 
+
 while(my ($name, $idx) = each %pp_files)
 {
     if($name =~ /^O_/){
@@ -124,7 +126,9 @@ while(my($name,$idx) = each %pp_files){
         print OUT1 "Quantile_range\tsignal2noise\n";
         for my $k ( sort {$a<=>$b} keys %quant){
             print OUT1 $k."\t".$quant{$k}."\n";
+	    
         }
+	
         close(IN);
     }
     
