@@ -42,6 +42,12 @@ Unpack the source code archive. The folder contains the following::
 If you wish to get the signal:noise ratio infomation using increasing-window quantile scan (for ex. top 1%, top 5%, top 10% etc) than use the following script::
 
     $ perl  robust_peak_pair_stats.pl -h
+    $ Options: -i <path1>     path to the folder with index files [accepted index file extensions, idx, tab]. 
+    $          -d <path2>     path to the folder with S_*.gff and O_* files.   
+    $          -g             organism, sg07=>yeast, mm09=>MouseV9, mm08=>MouseV8, hg18=>human18, hg19=>human19, dm03=>Drosophila
+    $          -s            size of genome[optional] In case of other genomes, set -g as NA and -s as the size of genome (see ex. below)
+
+
 
 Do a test run of the script by typing::
 
