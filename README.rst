@@ -58,6 +58,11 @@ The folder should now contain a "peak_pair_stats.txt" file. This means that scri
 if you wish to get the signal:noise information using fixed-width quantile scan (for ex. 0-5 %, 5-10 %, 10- 15 %) than use the following script::
 
     $ perl pp_stats_5pt_scan.pl -h
+    $ Options: -i <path1>     path to the folder with index files[accepted index file extensions, idx, tab]. 
+    $          -d <path2>     path to the folder with S_*.gff and O_* files. 
+    $          -g             organism, sg07=>yeast, mm09=>MouseV9, mm08=>MouseV8, hg18=>human18, hg19=>human19, dm03=>Drosophila
+    $          -s             size of genome[optional] In case of other genomes, set -g as NA and -s as the size of genome (see ex. below)
+    $	       -p <number>    the percent quantile you need to use to scan. For ex. scan window of 5 is default.
 
 Do a test run of the script by typing::
 
