@@ -223,9 +223,9 @@ sub check_dir{
 
 sub help_message {
   print qq{
-Program: robust_peak_pair_stats.pl (Calculate stats on peak pairs)
+Program: pp_stats_5pt_scan.pl (Calculate stats on peak pairs)
 Contact: Rohit Reja <rzr142\@psu.edu>
-Usage:   robust_peak_pair_stats.pl -i <index_file_directory> -d <path_to_directory_containing_S_*_and_D_*_files> -g <organism_name>
+Usage:   pp_stats_5pt_scan.pl -i <index_file_directory> -d <path_to_directory_containing_S_*_and_D_*_files> -g <organism_name> -p 5
 
     NOTE:    If you input files were saved using MS excel, then use:  perl -p -e 's/^M//g;' <input_file> > <input_file_no_excel_characters>
              to remove the excel characters in your file. ^M sould be typed as "ctrl-v-m". Or else the script will not work properly.
@@ -237,9 +237,9 @@ Usage:   robust_peak_pair_stats.pl -i <index_file_directory> -d <path_to_directo
 	     -p <number>    the percent quantile you need to use to scan. For ex. scan window of 5 is default.
 
     Example:
-      perl robust_peak_pair_stats.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g sg07
-      perl robust_peak_pair_stats.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g NA -s 160000000
-      perl robust_peak_pair_stats.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g NA -s 160000000 -p 10
+      perl pp_stats_5pt_scan.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g sg07
+      perl pp_stats_5pt_scan.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g NA -s 160000000
+      perl pp_stats_5pt_scan.pl -i  ./ -d genetrack_s5e10F1/cwpair_output_mode_f0u0d100b3/ -g NA -s 160000000 -p 10
       
     Output:
     Produces a "peak_pair_stats.txt" file in the folder that contains the S_*and D_* files. It also produces a
