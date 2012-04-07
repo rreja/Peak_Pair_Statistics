@@ -79,12 +79,12 @@ Following output files will be generated:
     - Mean peak-pair occupancy
     - FRIP (Fraction of all mapped reads in peak-pairs) 
     - top_1pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
-	- top_5pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
-	- top_10pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
-	- top_25pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
-	- top_50pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
-	- top_75pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
-	- top_100pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
+    - top_5pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
+    - top_10pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
+    - top_25pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
+    - top_50pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
+    - top_75pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
+    - top_100pt_signal:noise [only in the output of "robust_peak_pair_stats.pl"]
 	
    
 
