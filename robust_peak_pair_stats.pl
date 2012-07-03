@@ -90,6 +90,7 @@ while(my ($name, $idx) = each %pp_files)
 }
 while(my($name,$idx) = each %pp_files){
     if($name =~ /^S_/){
+	print "Analysing ".$idx." and ".$name."\n";
         open IN, $dir.$name || die "File not found";
         my @tmp = split(/_/,$name);
         my $count_S = 0;
