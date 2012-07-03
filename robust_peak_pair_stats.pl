@@ -170,16 +170,16 @@ sub find_gsize
     my $genome = shift;
     if($genome eq "sg07"){
         
-        return 15000000;
+        return 12100000;
     }
     elsif($genome eq "mm09"){
-        return(3000000000);
+        return(1865500000);
     }
     elsif($genome eq "mm08"){
         return(3000000000);
     }
     elsif($genome eq "hg18"){
-        return(3000000000);
+        return(2700000000);
     }
     elsif($genome eq "hg19"){
         return(3000000000);
