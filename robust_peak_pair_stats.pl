@@ -118,7 +118,8 @@ while(my($name,$idx) = each %pp_files){
         my $quant_50 = sum_quantile(\@sorted_tags,50,$D,$noise_per_bp);
         my $quant_75 = sum_quantile(\@sorted_tags,75,$D,$noise_per_bp);
         my $quant_100 = sum_quantile(\@sorted_tags,100,$D,$noise_per_bp);
-        
+        my $m =  mode(@cwdist);
+        $m =~ s/^M//g;
         my $vec = $idx."\t".mode(@cwdist)."\t".$no_of_peaks."\t".$hash_O{$pp_files{$name}}."\t".median(@tags)."\t".mean(@tags);
         my $quants = $quant_1."\t".$quant_5."\t".$quant_10."\t".$quant_25."\t".$quant_50."\t".$quant_75."\t".$quant_100;
         print OUT $vec."\t".$sum_of_col6/$hash_idx{$idx}."\t".$quants."\n";
@@ -132,6 +133,9 @@ sub sum_quantile{
     my $sum = 0;
     my $length = scalar(@$array);
     my $quant = int($length*($cutoff/100));
+    if($quant == 0){
+        return 0;
+    }
     for(my $i=0;$i<$quant;$i++){
         $sum += $$array[$i];
     }
