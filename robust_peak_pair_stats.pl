@@ -95,7 +95,8 @@ while(my($name,$idx) = each %pp_files){
         my @tmp = split(/_/,$name);
         my $count_S = 0;
         my $sum_of_col6 = 0;
-        my (@cwdist,@tags,$D);
+        my (@cwdist,@tags) = ();
+	my $D;
         if(pop(@tmp) =~ /^\D\d+\D(\d+).*/) # S_* files should have the same format sigma-exclusion-filter==> s5e20F1
         {$D = $1;}
         while(<IN>){
@@ -145,6 +146,7 @@ sub sum_quantile{
 }
 
 sub median{
+    @_ or return 0;
     my @a = sort {$a <=> $b} @_;
   return ($a[$#a/2] + $a[@a/2]) / 2;
 }
@@ -158,6 +160,7 @@ sub mean{
 
 sub mode
 {
+    @_ or return 0;
     my %c;
     foreach my $e (@_) {
 	$c{$e}++;
